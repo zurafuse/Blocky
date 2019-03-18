@@ -8,6 +8,7 @@ var Level = 1;
 
 var pictures = {
 	backgrounds: {
+		backgroundColor: "#acf",
 		cloud1: new Image(),
 		cloud2: new Image(),
 		hill1: new Image(),
@@ -32,7 +33,7 @@ var pictures = {
 	drawBackgrounds: function(pics){
 		//draw sky
 		context.beginPath();
-		context.fillStyle = "#acf";
+		context.fillStyle = this.backgrounds.backgroundColor;
 		context.rect(0, 0, canvas.width, canvas.height);
 		context.fill();
 		context.closePath();
@@ -104,7 +105,7 @@ var player = {
 	move: function(){
 		//control movements
 		if (this.controller.right == true){
-			if (this.x < canvas.width){
+			if (this.x + this.width * 0.3 < canvas.width){
 				this.x+=this.speed;
 			}
 			else{
@@ -158,8 +159,10 @@ var player = {
 		
 		//display Level text at top
 		context.font = "bold " + gridWidth + "pt Ariel";
-		context.fillStyle = "black";
+		context.strokeStyle = "black";
+		context.fillStyle = "white";
 		context.fillText("LEVEL: " + Level, canvas.width * 0.33, canvas.height * 0.1);
+		context.strokeText("LEVEL: " + Level, canvas.width * 0.33, canvas.height * 0.1);
 	}
 };
 
