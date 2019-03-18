@@ -4,7 +4,8 @@ canvas.width = window.innerWidth *.9;
 canvas.height = canvas.width * .5;
 var context = canvas.getContext("2d");
 var gridWidth = canvas.width / 30;
-var Level = 1;
+var Level = 24;
+var Score = 0;
 
 var pictures = {
 	backgrounds: {
@@ -19,6 +20,10 @@ var pictures = {
 		palm: new Image(),
 		tree: new Image()
 	},
+	objects: {
+		plane: new Image(),
+		planeleft: new Image()
+	},
 	setPics: function(){
 		this.backgrounds.cloud1.src = "images/cloud1.png";
 		this.backgrounds.cloud2.src = "images/cloud2.png";
@@ -29,13 +34,31 @@ var pictures = {
 		this.backgrounds.mushroom.src = "images/mushroom1.png";
 		this.backgrounds.palm.src = "images/palm.png";
 		this.backgrounds.tree.src = "images/tree.png";
+		this.objects.plane.src = "images/plane.png";
+		this.objects.planeleft.src = "images/planeleft.png";
 	},
 	drawBackgrounds: function(pics){
 		//draw sky
 		context.beginPath();
-		context.fillStyle = this.backgrounds.backgroundColor;
-		context.rect(0, 0, canvas.width, canvas.height);
-		context.fill();
+		if (this.backgrounds.backgroundColor == "caveentrance"){
+			var grd = context.createLinearGradient(0, 0, canvas.width * 0.23, 0);
+			grd.addColorStop(0, "white");
+			grd.addColorStop(1, "black");
+			context.fillStyle = grd;
+			context.fillRect(0, 0, canvas.width, canvas.height);			
+		}
+		else if (this.backgrounds.backgroundColor == "caveexit") {
+			var grd = context.createLinearGradient(0, 0, canvas.width * 0.8, 0);
+			grd.addColorStop(0, "black");
+			grd.addColorStop(1, "white");		
+			context.fillStyle = grd;
+			context.fillRect(0, 0, canvas.width, canvas.height);			
+		}
+		else{
+			context.fillStyle = this.backgrounds.backgroundColor;
+			context.rect(0, 0, canvas.width, canvas.height);
+			context.fill();
+		}
 		context.closePath();
 		//draw backgrounds
 		pics.forEach(function(pic){
@@ -46,6 +69,25 @@ var pictures = {
 pictures.setPics();
 
 const gravity = gridWidth * 0.3;
+
+
+var Objects = {
+	plane: {
+		img: pictures.objects.plane,
+		x: canvas.width * 0.5,
+		y: canvas.height * 0.6,
+		width: gridWidth * 4,
+		height: gridWidth * 1.5,
+		draw: () => {
+			context.drawImage(Objects.plane.img, Objects.plane.x, Objects.plane.y, Objects.plane.width, Objects.plane.height);			
+		},
+		update: () => {
+			
+			Objects.plane.draw();
+		}
+	}
+};
+
 
 var background = function(img, x, y, width, height){
 	this.img = img;
@@ -158,11 +200,13 @@ var player = {
 		context.closePath();
 		
 		//display Level text at top
-		context.font = "bold " + gridWidth + "pt Ariel";
+		context.font = "bold " + gridWidth + "pt sans-serif";
 		context.strokeStyle = "black";
 		context.fillStyle = "white";
-		context.fillText("LEVEL: " + Level, canvas.width * 0.33, canvas.height * 0.1);
-		context.strokeText("LEVEL: " + Level, canvas.width * 0.33, canvas.height * 0.1);
+		context.fillText("LEVEL: " + Level, canvas.width * 0.25, canvas.height * 0.1);
+		context.strokeText("LEVEL: " + Level, canvas.width * 0.25, canvas.height * 0.1);
+		context.fillText("SCORE: " + Score, canvas.width * 0.5, canvas.height * 0.1);
+		context.strokeText("SCORE: " + Score, canvas.width * 0.5, canvas.height * 0.1);		
 	}
 };
 
@@ -196,8 +240,13 @@ document.addEventListener("keyup", function(key){
 var Update = function(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	pictures.drawBackgrounds(backgrounds);
-	player.update();
 	floor.update();
+	//other updates here
+	if (Level == 20 || Level == 21)
+	{
+		Objects.plane.update();
+	}
+	player.update();
 	Animation(Update);
 };
 
