@@ -1,6 +1,0 @@
-forest
-caves
-water
-mountain
-clouds
-space

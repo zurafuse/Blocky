@@ -4,7 +4,7 @@ canvas.width = window.innerWidth *.9;
 canvas.height = canvas.width * .5;
 var context = canvas.getContext("2d");
 var gridWidth = canvas.width / 30;
-var Level = 24;
+var Level = 1;
 var Score = 0;
 
 var pictures = {
@@ -22,7 +22,11 @@ var pictures = {
 	},
 	objects: {
 		plane: new Image(),
-		planeleft: new Image()
+		planeleft: new Image(),
+		caveentrance: new Image(),
+		caveexit: new Image(),
+		boat: new Image(),
+		boatright: new Image()
 	},
 	setPics: function(){
 		this.backgrounds.cloud1.src = "images/cloud1.png";
@@ -36,6 +40,10 @@ var pictures = {
 		this.backgrounds.tree.src = "images/tree.png";
 		this.objects.plane.src = "images/plane.png";
 		this.objects.planeleft.src = "images/planeleft.png";
+		this.objects.caveentrance.src = "images/caveentrance.png";
+		this.objects.caveexit.src = "images/caveexit.png";
+		this.objects.boat.src = "images/boat.png";
+		this.objects.boatright.src = "images/boatright.png";
 	},
 	drawBackgrounds: function(pics){
 		//draw sky
@@ -85,7 +93,34 @@ var Objects = {
 			
 			Objects.plane.draw();
 		}
-	}
+	},
+	cave: {
+		img: pictures.objects.caveentrance,
+		x: canvas.width * 0.667,
+		y: canvas.height * 0.27,
+		width: gridWidth * 10,
+		height: gridWidth * 8,
+		draw: () => {
+			context.drawImage(Objects.cave.img, Objects.cave.x, Objects.cave.y, Objects.cave.width, Objects.cave.height);			
+		},
+		update: () => {
+			Objects.cave.draw();
+		}
+	},
+	boat: {
+		img: pictures.objects.boatright,
+		x: canvas.width * 0.5,
+		y: canvas.height * 0.63,
+		width: gridWidth * 3.5,
+		height: gridWidth * 2.5,
+		draw: () => {
+			context.drawImage(Objects.boat.img, Objects.boat.x, Objects.boat.y, Objects.boat.width, Objects.boat.height);			
+		},
+		update: () => {
+			
+			Objects.boat.draw();
+		}
+	}	
 };
 
 
@@ -246,6 +281,14 @@ var Update = function(){
 	{
 		Objects.plane.update();
 	}
+	if (Level == 10 || Level == 11)
+	{
+		Objects.boat.update();
+	}
+	if (Level == 5 || Level == 10)
+	{
+		Objects.cave.update();
+	}	
 	player.update();
 	Animation(Update);
 };

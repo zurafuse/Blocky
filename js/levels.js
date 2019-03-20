@@ -128,7 +128,9 @@ else if (Level == 4){
 //LEVEL 5
 else if (Level == 5){
 	pictures.backgrounds.backgroundColor = "#acf";
-
+	Objects.cave.img = pictures.objects.caveentrance;
+	Objects.cave.x = canvas.width * 0.667;
+	Objects.cave.y = canvas.height * 0.265;
 
 	floor = {
 		x: 0,
@@ -252,7 +254,21 @@ else if (Level == 9){
 }
 //LEVEL 10
 else if (Level == 10){
-	pictures.backgrounds.backgroundColor = "#acf";	
+	pictures.backgrounds.backgroundColor = "#acf";
+	//cave
+	Objects.cave.img = pictures.objects.caveexit;
+	Objects.cave.x = 0;
+	Objects.cave.y = canvas.height * 0.265;
+	
+	//boat
+	if (dir == "left"){
+		Objects.boat.img = pictures.objects.boat;
+	}
+	else
+	{
+		Objects.boat.img = pictures.objects.boatright;
+		Objects.boat.x = canvas.width * 0.49;
+	}
 	
 	
 	floor = {
@@ -283,7 +299,17 @@ else if (Level == 10){
 //LEVEL 11
 else if (Level == 11){
 	pictures.backgrounds.backgroundColor = "#acf";
-	
+
+	//boat
+	if (dir == "left"){
+		Objects.boat.img = pictures.objects.boat;
+	}
+	else
+	{
+		Objects.boat.img = pictures.objects.boatright;
+		Objects.boat.x = canvas.width * 0.39;
+	}
+		
 	
 	floor = {
 		x: 0,
@@ -524,9 +550,10 @@ else if (Level == 20){
 	else
 	{
 		Objects.plane.img = pictures.objects.plane;
+		Objects.plane.x = canvas.width * 0.37;
 	}
-	Objects.plane.x = canvas.width * 0.37;
 	Objects.plane.y = canvas.height * 0.5;
+
 	
 }
 //LEVEL 21
@@ -556,8 +583,8 @@ else if (Level == 21){
 	else
 	{
 		Objects.plane.img = pictures.objects.plane;
+		Objects.plane.x = canvas.width * 0.5;
 	}
-	Objects.plane.x = canvas.width * 0.5;
 	Objects.plane.y = canvas.height * 0.6;
 	
 }
