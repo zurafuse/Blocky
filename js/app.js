@@ -18,7 +18,8 @@ var pictures = {
 		cactus: new Image(),
 		mushroom: new Image(),
 		palm: new Image(),
-		tree: new Image()
+		tree: new Image(),
+		house: new Image()
 	},
 	objects: {
 		plane: new Image(),
@@ -26,7 +27,11 @@ var pictures = {
 		caveentrance: new Image(),
 		caveexit: new Image(),
 		boat: new Image(),
-		boatright: new Image()
+		boatright: new Image(),
+		mountainside: new Image(),
+		rocket: new Image(),
+		flag: new Image(),
+		flagicon: new Image()
 	},
 	setPics: function(){
 		this.backgrounds.cloud1.src = "images/cloud1.png";
@@ -38,12 +43,17 @@ var pictures = {
 		this.backgrounds.mushroom.src = "images/mushroom1.png";
 		this.backgrounds.palm.src = "images/palm.png";
 		this.backgrounds.tree.src = "images/tree.png";
+		this.backgrounds.house.src = "images/house.png";
 		this.objects.plane.src = "images/plane.png";
 		this.objects.planeleft.src = "images/planeleft.png";
 		this.objects.caveentrance.src = "images/caveentrance.png";
 		this.objects.caveexit.src = "images/caveexit.png";
 		this.objects.boat.src = "images/boat.png";
 		this.objects.boatright.src = "images/boatright.png";
+		this.objects.mountainside.src = "images/mountainside.png";
+		this.objects.rocket.src = "images/rocket.png";
+		this.objects.flag.src = "images/flag.png";
+		this.objects.flagicon.src = "images/flagicon.png";		
 	},
 	drawBackgrounds: function(pics){
 		//draw sky
@@ -120,7 +130,72 @@ var Objects = {
 			
 			Objects.boat.draw();
 		}
-	}	
+	},
+	mountain: {
+		img: pictures.objects.mountainside,
+		x: canvas.width * 0.5,
+		y: 0,
+		width: canvas.width * 0.5,
+		height: canvas.height * 0.8,
+		draw: () => {
+			context.drawImage(Objects.mountain.img, Objects.mountain.x, Objects.mountain.y, Objects.mountain.width, Objects.mountain.height);			
+		},
+		update: () => {
+			
+			Objects.mountain.draw();
+		}
+	},
+	rocket: {
+		img: pictures.objects.rocket,
+		x: canvas.width * 0.83,
+		y: canvas.height * 0.42,
+		width: gridWidth * 3,
+		height: gridWidth * 4.5,
+		draw: () => {
+			context.drawImage(Objects.rocket.img, Objects.rocket.x, Objects.rocket.y, Objects.rocket.width, Objects.rocket.height);			
+		},
+		update: () => {
+			
+			Objects.rocket.draw();
+		}
+	},
+	flag: {
+		img: pictures.objects.flag,
+		x: canvas.width * 0.5,
+		y: canvas.height * 0.51,
+		width: gridWidth * 3,
+		height: gridWidth * 4.5,
+		draw: () => {
+			context.drawImage(Objects.flag.img, Objects.flag.x, Objects.flag.y, Objects.flag.width, Objects.flag.height);			
+		},
+		update: () => {
+			if (player.collision(Objects.flag))
+			{
+				player.flag = true;
+			}
+			Objects.flag.draw();
+		}
+	},
+	flagicon: {
+		img: pictures.objects.flagicon,
+		x: canvas.width * 0.88,
+		y: canvas.height * 0.02,
+		width: gridWidth * 2,
+		height: gridWidth * 2,
+		draw: () => {
+			context.drawImage(Objects.flagicon.img, Objects.flagicon.x, Objects.flagicon.y, Objects.flagicon.width, Objects.flagicon.height);			
+		},
+		update: () => {
+			
+			Objects.flagicon.draw();
+		}
+	},
+	house: {
+		x: gridWidth * 1,
+		y: gridWidth * 7,
+		width: gridWidth * 8,
+		height: gridWidth * 5
+	}
 };
 
 
@@ -137,7 +212,7 @@ background.prototype.draw = function(){
 
 var backgrounds = [];
 
-backgrounds.push(new background(pictures.backgrounds.hill1, 9, 8, 2, 4), new background(pictures.backgrounds.hill1, 17, 6, 3, 6));
+backgrounds.push(new background(pictures.backgrounds.house, 1, 7, 8, 5), new background(pictures.backgrounds.hill1, 9, 8, 2, 4), new background(pictures.backgrounds.hill1, 17, 6, 3, 6));
 backgrounds.push(new background(pictures.backgrounds.cloud1, 6, 3, 2, 1), new background(pictures.backgrounds.palm, 6, 8, 2, 4),
 				new background(pictures.backgrounds.mushroom, 12, 11, 1, 1), new background (pictures.backgrounds.cloud1, 17, 6, 2, 1),
 				new background(pictures.backgrounds.tree, 23, 8, 3, 4));
@@ -174,11 +249,24 @@ var player = {
 	height: gridWidth,
 	jump: true,
 	jumpTrigger: false,
+	flag: false,
+	locked: false,
 	controller: {
 		right: false,
 		left: false
 	},
 	speed: canvas.width * .005,
+	collision: (obj) => {
+		if (player.x + player.width > obj.x && player.x < obj.x + obj.width && player.y + player.height > obj.y && 
+			player.y < obj.y + obj.height)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	},
 	move: function(){
 		//control movements
 		if (this.controller.right == true){
@@ -203,6 +291,14 @@ var player = {
 		}
 	},
 	update: function(){
+		//win
+		if (player.flag == true && player.collision(Objects.house) == true && Level == 1)
+		{
+			player.locked = true;
+			Events.win = true;
+			player.flag = false;
+			setTimeout(() => {restart();}, 2000);
+		}
 		//decrease force gradually if you are jumping or start falling
 		//if force increments below 0, correct it to 0 so you stop falling.
 		if (this.force > 0){
@@ -212,27 +308,29 @@ var player = {
 			this.force = 0;
 		}
 		
-		this.move();
-		//gravity
-		if (this.y + this.height < floor.y){
-			this.y+=(gravity - this.force);
-		}
-		else{
-			if (this.jumpTrigger == false){
-				this.jump = false;
-				this.y = floor.y - this.height;
-			}
-			else{
+		if (this.locked == false){
+			this.move();
+			//gravity
+			if (this.y + this.height < floor.y){
 				this.y+=(gravity - this.force);
 			}
+			else{
+				if (this.jumpTrigger == false){
+					this.jump = false;
+					this.y = floor.y - this.height;
+				}
+				else{
+					this.y+=(gravity - this.force);
+				}
+			}
+			
+			context.beginPath();
+			context.fillStyle = "red";
+			context.rect(this.x, this.y, this.width, this.height);
+			context.stroke();
+			context.fill();
+			context.closePath();
 		}
-		
-		context.beginPath();
-		context.fillStyle = "red";
-		context.rect(this.x, this.y, this.width, this.height);
-		context.stroke();
-		context.fill();
-		context.closePath();
 		
 		//display Level text at top
 		context.font = "bold " + gridWidth + "pt sans-serif";
@@ -277,6 +375,11 @@ var Update = function(){
 	pictures.drawBackgrounds(backgrounds);
 	floor.update();
 	//other updates here
+	if (Events.win == true)
+	{
+		Events.winner();		
+	}
+	//Level updates here
 	if (Level == 20 || Level == 21)
 	{
 		Objects.plane.update();
@@ -288,9 +391,38 @@ var Update = function(){
 	if (Level == 5 || Level == 10)
 	{
 		Objects.cave.update();
-	}	
+	}
+	if (Level == 15)
+	{
+		Objects.mountain.update();
+	}
+	if (Level == 25 || Level == 26)
+	{
+		Objects.rocket.update();
+	}
+	if (player.flag == false && Level == 30)
+	{
+		Objects.flag.update();
+	}
+	if (player.flag == true)
+	{
+		Objects.flagicon.update();
+	}
 	player.update();
 	Animation(Update);
 };
 
 Update();
+
+var restart = () => {
+	Events.win = false;
+	Events.die = false;
+	player.locked = false;
+	player.flag = false;
+	score = 0;
+	backgrounds = [];
+	Level = 0;
+	newLevel("right");
+	player.x = 90;
+	player.y = 20;		
+};

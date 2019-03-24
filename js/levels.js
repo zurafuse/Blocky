@@ -13,7 +13,7 @@ var newLevel = (dir) => {
 if (Level == 1){
 	pictures.backgrounds.backgroundColor = "#acf";
 	
-	backgrounds.push(new background(pictures.backgrounds.hill1, 9, 8, 2, 4), new background(pictures.backgrounds.hill1, 17, 6, 3, 6));
+	backgrounds.push(new background(pictures.backgrounds.house, 1, 7, 8, 5), new background(pictures.backgrounds.hill1, 9, 8, 2, 4), new background(pictures.backgrounds.hill1, 17, 6, 3, 6));
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 6, 3, 2, 1), new background(pictures.backgrounds.palm, 6, 8, 2, 4),
 					new background(pictures.backgrounds.mushroom, 12, 11, 1, 1), new background (pictures.backgrounds.cloud1, 17, 6, 2, 1),
 					new background(pictures.backgrounds.tree, 23, 8, 3, 4));
@@ -409,6 +409,9 @@ else if (Level == 14){
 }
 //LEVEL 15
 else if (Level == 15){
+	if (dir == "left"){
+		player.y = canvas.height * 0.1;
+	}
 
 	pictures.backgrounds.backgroundColor = "#acf";
 
@@ -660,8 +663,12 @@ else if (Level == 24){
 else if (Level == 25){
 	if (dir == "left"){
 		player.y = gridWidth;
-		player.x = canvas.width * 0.6;
-	}	
+		player.x = canvas.width * 0.5;
+	}
+
+	Objects.rocket.x = canvas.width * 0.83;
+	Objects.rocket.y = canvas.height * 0.42
+	
 	pictures.backgrounds.backgroundColor = "#acf";
 
 	floor = {
@@ -686,9 +693,12 @@ else if (Level == 25){
 else if (Level == 26){
 	if (dir == "right"){
 		player.y = gridWidth;
-		player.x = canvas.width * 0.1;
+		player.x = canvas.width * 0.5;
 	}
 	pictures.backgrounds.backgroundColor = "black";
+	
+	Objects.rocket.x = canvas.width * 0.08;
+	Objects.rocket.y = canvas.height * 0.51;	
 
 	floor = {
 		x: 0,
@@ -710,18 +720,87 @@ else if (Level == 26){
 }
 //LEVEL 27
 else if (Level == 27){
+
+	pictures.backgrounds.backgroundColor = "black";
+	floor = {
+		x: 0,
+		y: canvas.height * .8,
+		width: canvas.width,
+		height: canvas.height * 0.2,
+		update: function(){
+			//ground
+			context.beginPath();
+			context.fillStyle = "lightgray";
+			context.rect(this.x, this.y, this.width, this.height);
+			context.stroke();
+			context.fill();
+			context.closePath();		
+		}
+	};		
+	
 	
 }
 //LEVEL 28
 else if (Level == 28){
+
+	pictures.backgrounds.backgroundColor = "black";
+	floor = {
+		x: 0,
+		y: canvas.height * .8,
+		width: canvas.width,
+		height: canvas.height * 0.2,
+		update: function(){
+			//ground
+			context.beginPath();
+			context.fillStyle = "lightgray";
+			context.rect(this.x, this.y, this.width, this.height);
+			context.stroke();
+			context.fill();
+			context.closePath();		
+		}
+	};	
 	
 }
 //LEVEL 29
 else if (Level == 29){
+
+	pictures.backgrounds.backgroundColor = "black";
+	floor = {
+		x: 0,
+		y: canvas.height * .8,
+		width: canvas.width,
+		height: canvas.height * 0.2,
+		update: function(){
+			//ground
+			context.beginPath();
+			context.fillStyle = "lightgray";
+			context.rect(this.x, this.y, this.width, this.height);
+			context.stroke();
+			context.fill();
+			context.closePath();		
+		}
+	};	
 	
 }
 //LEVEL 30
 else if (Level == 30){
+
+	pictures.backgrounds.backgroundColor = "black";
+	floor = {
+		x: 0,
+		y: canvas.height * .8,
+		width: canvas.width,
+		height: canvas.height * 0.2,
+		update: function(){
+			//ground
+			context.beginPath();
+			context.fillStyle = "lightgray";
+			context.rect(this.x, this.y, this.width, this.height);
+			context.stroke();
+			context.fill();
+			context.closePath();		
+		}
+	};	
 	
 }
 	
