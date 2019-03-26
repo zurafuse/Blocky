@@ -96,6 +96,7 @@ var Objects = {
 		y: canvas.height * 0.6,
 		width: gridWidth * 4,
 		height: gridWidth * 1.5,
+		locked: false,
 		draw: () => {
 			context.drawImage(Objects.plane.img, Objects.plane.x, Objects.plane.y, Objects.plane.width, Objects.plane.height);			
 		},
@@ -123,6 +124,7 @@ var Objects = {
 		y: canvas.height * 0.63,
 		width: gridWidth * 3.5,
 		height: gridWidth * 2.5,
+		locked: false,
 		draw: () => {
 			context.drawImage(Objects.boat.img, Objects.boat.x, Objects.boat.y, Objects.boat.width, Objects.boat.height);			
 		},
@@ -151,6 +153,7 @@ var Objects = {
 		y: canvas.height * 0.42,
 		width: gridWidth * 3,
 		height: gridWidth * 4.5,
+		locked: false,
 		draw: () => {
 			context.drawImage(Objects.rocket.img, Objects.rocket.x, Objects.rocket.y, Objects.rocket.width, Objects.rocket.height);			
 		},
@@ -268,27 +271,35 @@ var player = {
 		}
 	},
 	move: function(){
-		//control movements
-		if (this.controller.right == true){
-			if (this.x + this.width * 0.3 < canvas.width){
-				this.x+=this.speed;
+		if (this.locked == false){
+			//control movements
+			if (this.controller.right == true){
+				if (this.x + this.width * 0.3 < canvas.width){
+					this.x+=this.speed;
+				}
+				else{
+					if (Level != 30){
+						newLevel("right");
+					}
+				}
 			}
-			else{
-				if (Level != 30){
-					newLevel("right");
+			else if (this.controller.left == true){
+				if (this.x + (this.width * 0.7) > 0){
+					this.x-=this.speed; 
+				}
+				else{
+					if (Level != 1){
+						newLevel("left");
+					}
 				}
 			}
 		}
-		else if (this.controller.left == true){
-			if (this.x + (this.width * 0.7) > 0){
-				this.x-=this.speed; 
-			}
-			else{
-				if (Level != 1){
-					newLevel("left");
-				}
-			}
-		}
+	},
+	die: function() {
+		player.locked = true;
+		Events.die = true;
+		player.flag = false;
+		setTimeout(() => {restart();}, 2000);		
 	},
 	update: function(){
 		//win
@@ -299,6 +310,24 @@ var player = {
 			player.flag = false;
 			setTimeout(() => {restart();}, 2000);
 		}
+		//boat
+		if ((Level == 10 || Level == 11 ) && player.collision(Objects.boat) && Objects.boat.locked == false)
+		{
+			player.locked = true;
+			Events.boatevent = true;
+		}
+		//plane
+		if ((Level == 20 || Level == 21 ) && player.collision(Objects.plane) && Objects.plane.locked == false)
+		{
+			player.locked = true;
+			Events.planeevent = true;
+		}
+		//rocket
+		if ((Level == 25 || Level == 26 ) && player.collision(Objects.rocket))
+		{
+			player.locked = true;
+			Events.rocketevent = true;
+		}		
 		//decrease force gradually if you are jumping or start falling
 		//if force increments below 0, correct it to 0 so you stop falling.
 		if (this.force > 0){
@@ -378,6 +407,22 @@ var Update = function(){
 	if (Events.win == true)
 	{
 		Events.winner();		
+	}
+	if (Events.die == true)
+	{
+		Events.gameover();		
+	}
+	if (Events.boatevent == true)
+	{
+		Events.boat();
+	}
+	if (Events.planeevent == true)
+	{
+		Events.plane();
+	}
+	if (Events.rocketevent == true)
+	{
+		Events.rocket();
 	}
 	//Level updates here
 	if (Level == 20 || Level == 21)

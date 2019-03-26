@@ -8,6 +8,9 @@ var newLevel = (dir) => {
 		player.x = 0;
 	}
 	
+	Objects.boat.locked = false;
+	Objects.plane.locked = false;
+	
 	backgrounds = [];
 //LEVEL 1
 if (Level == 1){
@@ -530,6 +533,16 @@ else if (Level == 19){
 else if (Level == 20){
 	
 	pictures.backgrounds.backgroundColor = "#acf";
+	
+	//plane
+	if (dir == "left"){
+		Objects.plane.img = pictures.objects.planeleft;
+	}
+	else
+	{
+		Objects.plane.img = pictures.objects.plane;
+		Objects.plane.x = canvas.width * 0.49;
+	}
 
 	floor = {
 		x: 0,
@@ -563,6 +576,16 @@ else if (Level == 20){
 else if (Level == 21){
 
 	pictures.backgrounds.backgroundColor = "#acf";
+	
+	//plane
+	if (dir == "left"){
+		Objects.plane.img = pictures.objects.planeleft;
+	}
+	else
+	{
+		Objects.plane.img = pictures.objects.plane;
+		Objects.plane.x = canvas.width * 0.39;
+	}
 
 	floor = {
 		x: canvas.width * 0.5,
