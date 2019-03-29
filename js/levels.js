@@ -11,7 +11,9 @@ var newLevel = (dir) => {
 	Objects.boat.locked = false;
 	Objects.plane.locked = false;
 	
+	holes = [];
 	backgrounds = [];
+	gems = [];
 //LEVEL 1
 if (Level == 1){
 	pictures.backgrounds.backgroundColor = "#acf";
@@ -48,6 +50,10 @@ if (Level == 1){
 else if (Level == 2){
 	pictures.backgrounds.backgroundColor = "#acf";
 
+	gems.push(new gemClass("pink", 10, 8, 0.5, 0.5), new gemClass("yellow", 15, 5, 0.5, 0.5), new gemClass("red", 10, 5, 0.5, 0.5));
+	gems.push(new gemClass("white", 16, 9, 0.5, 0.5), new gemClass("rainbow", 17, 9, 0.5, 0.5), new gemClass("hazel", 19, 9, 0.5, 0.5));
+
+	holes.push(new holeClass(10, 3));
 
 	floor = {
 		x: 0,
@@ -103,7 +109,11 @@ else if (Level == 3){
 //LEVEL 4
 else if (Level == 4){
 		pictures.backgrounds.backgroundColor = "#acf";
-	
+
+
+
+
+	holes.push(new holeClass(15, 4));		
 	
 	floor = {
 		x: 0,
@@ -211,7 +221,9 @@ else if (Level == 8){
 
 	pictures.backgrounds.backgroundColor = "black";	
 	
-	
+
+
+	holes.push(new holeClass(12, 4));	
 	
 		floor = {
 		x: 0,
@@ -273,6 +285,8 @@ else if (Level == 10){
 		Objects.boat.x = canvas.width * 0.49;
 	}
 	
+	holes.push(new holeClass(14.9, 10, "blue"));
+	
 	
 	floor = {
 		x: 0,
@@ -312,7 +326,8 @@ else if (Level == 11){
 		Objects.boat.img = pictures.objects.boatright;
 		Objects.boat.x = canvas.width * 0.39;
 	}
-		
+
+	holes.push(new holeClass(0, 15, "blue"));	
 	
 	floor = {
 		x: 0,
@@ -457,13 +472,16 @@ else if (Level == 16){
 		}
 	};
 
-
+	holes.push(new holeClass(15, 3));
 	
 }
 //LEVEL 17
 else if (Level == 17){
 
 	pictures.backgrounds.backgroundColor = "#acf";
+	
+	
+	holes.push(new holeClass(11, 5));
 
 	floor = {
 		x: 0,
@@ -485,6 +503,8 @@ else if (Level == 17){
 }
 //LEVEL 18
 else if (Level == 18){
+	
+	holes.push(new holeClass(5, 4), new holeClass(13, 5));
 	
 	pictures.backgrounds.backgroundColor = "#acf";
 
@@ -511,6 +531,8 @@ else if (Level == 19){
 
 	pictures.backgrounds.backgroundColor = "#acf";
 
+
+	
 	floor = {
 		x: 0,
 		y: canvas.height * .6,
@@ -544,6 +566,7 @@ else if (Level == 20){
 		Objects.plane.x = canvas.width * 0.49;
 	}
 
+
 	floor = {
 		x: 0,
 		y: canvas.height * .6,
@@ -559,6 +582,8 @@ else if (Level == 20){
 			context.closePath();				
 		}
 	};	
+	
+	holes.push(new holeClass(15, 10));
 	
 	if (dir == "left"){
 		Objects.plane.img = pictures.objects.planeleft;
@@ -602,6 +627,8 @@ else if (Level == 21){
 			context.closePath();		
 		}
 	};	
+	
+	holes.push(new holeClass(0, 15));
 
 	if (dir == "left"){
 		Objects.plane.img = pictures.objects.planeleft;
@@ -633,7 +660,9 @@ else if (Level == 22){
 			context.fill();
 			context.closePath();		
 		}
-	};		
+	};	
+
+	holes.push(new holeClass(10, 4));	
 	
 }
 //LEVEL 23
@@ -656,7 +685,8 @@ else if (Level == 23){
 			context.closePath();		
 		}
 	};		
-	
+
+	holes.push(new holeClass(4, 4), new holeClass(11, 5), new holeClass(18, 3));	
 	
 }
 //LEVEL 24
@@ -680,6 +710,7 @@ else if (Level == 24){
 		}
 	};	
 
+	holes.push(new holeClass(13, 5));
 	
 }
 //LEVEL 25

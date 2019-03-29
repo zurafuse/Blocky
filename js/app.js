@@ -31,7 +31,8 @@ var pictures = {
 		mountainside: new Image(),
 		rocket: new Image(),
 		flag: new Image(),
-		flagicon: new Image()
+		flagicon: new Image(),
+		gems: new Image()
 	},
 	setPics: function(){
 		this.backgrounds.cloud1.src = "images/cloud1.png";
@@ -53,7 +54,8 @@ var pictures = {
 		this.objects.mountainside.src = "images/mountainside.png";
 		this.objects.rocket.src = "images/rocket.png";
 		this.objects.flag.src = "images/flag.png";
-		this.objects.flagicon.src = "images/flagicon.png";		
+		this.objects.flagicon.src = "images/flagicon.png";
+		this.objects.gems.src = "images/gems.png";
 	},
 	drawBackgrounds: function(pics){
 		//draw sky
@@ -82,7 +84,13 @@ var pictures = {
 		pics.forEach(function(pic){
 			pic.draw();
 		});
-	}
+	}, 
+	drawGems: function(pics){
+		//draw gems
+		pics.forEach(function(pic){
+			pic.draw();
+		});
+	}	
 };
 pictures.setPics();
 
@@ -174,6 +182,7 @@ var Objects = {
 		update: () => {
 			if (player.collision(Objects.flag))
 			{
+				score+=50;
 				player.flag = true;
 			}
 			Objects.flag.draw();
@@ -201,7 +210,49 @@ var Objects = {
 	}
 };
 
+var holeClass = function(x, width, color){
+	//by default, a hole is the same color as the background.
+	if (color == "undefined" || color == null)
+	{
+		this.color = pictures.backgrounds.backgroundColor;
+	}
+	else
+	{
+		this.color = color;
+	}
+	this.x = x * gridWidth;
+	this.y = floor.y - (canvas.height * 0.003);
+	this.width = width * gridWidth;
+	this.height = floor.height + (canvas.height * 0.01);
+	this.draw = () => {
+			context.beginPath();
+			context.fillStyle = this.color;
+			context.rect(this.x, this.y, this.width, this.height);
+			context.fill();
+			context.closePath();		
+	};
+	this.update = () => {
+		this.draw();
+		if (player.x >= this.x && player.x + player.width < this.x + this.width && player.y + player.height > this.y)
+		{
+			if (player.locked == false)
+			{
+				player.fall = true;
+			}
+		}
+	};
+};
 
+var holes = [];
+
+var holeUpdates = () => {
+	for (var i = 0; i < holes.length; i++){
+		holes[i].update();
+	}
+};
+
+
+//background class
 var background = function(img, x, y, width, height){
 	this.img = img;
 	this.x = x * gridWidth;
@@ -213,6 +264,7 @@ background.prototype.draw = function(){
 	context.drawImage(this.img, this.x, this.y, this.width, this.height);
 };
 
+
 var backgrounds = [];
 
 backgrounds.push(new background(pictures.backgrounds.house, 1, 7, 8, 5), new background(pictures.backgrounds.hill1, 9, 8, 2, 4), new background(pictures.backgrounds.hill1, 17, 6, 3, 6));
@@ -220,6 +272,65 @@ backgrounds.push(new background(pictures.backgrounds.cloud1, 6, 3, 2, 1), new ba
 				new background(pictures.backgrounds.mushroom, 12, 11, 1, 1), new background (pictures.backgrounds.cloud1, 17, 6, 2, 1),
 				new background(pictures.backgrounds.tree, 23, 8, 3, 4));
 
+				
+//gem class
+var gemClass = function(color, x, y, width, height){
+	this.img = pictures.objects.gems;
+	this.swidth = 144;
+	this.sheight = 144;
+	this.x = x * gridWidth;
+	this.y = y * gridWidth;
+	this.width = width * gridWidth;
+	this.height = height * gridWidth;
+	switch (color){
+		case "yellow":
+			this.sx = 0;
+			this.sy = 0;
+			break;
+		case "red":
+			this.sx = 145;
+			this.sy = 0;
+			break;
+		case "green":
+			this.sx = 289;
+			this.sy = 0;
+			break;
+		case "blue":
+			this.sx = 433;
+			this.sy = 0;
+			break;
+		case "hazel":
+			this.sx = 577;
+			this.sy = 0;
+			break;
+		case "purple":
+			this.sx = 0;
+			this.sy = 145;
+			break;
+		case "pink":
+			this.sx = 145;
+			this.sy = 145;
+			break;
+		case "white":
+			this.sx = 289;
+			this.sy = 145;
+			break;
+		case "orange":
+			this.sx = 433;
+			this.sy = 145;
+			break;
+		case "rainbow":
+			this.sx = 577;
+			this.sy = 145;
+			break;			
+	}
+};
+gemClass.prototype.draw = function(){
+	context.drawImage(this.img, this.sx, this.sy, this.swidth, this.sheight, this.x, this.y, this.width, this.height);
+};
+
+gems = [];
+		
 
 var floor = {
 	x: 0,
@@ -252,6 +363,7 @@ var player = {
 	height: gridWidth,
 	jump: true,
 	jumpTrigger: false,
+	fall: false,
 	flag: false,
 	locked: false,
 	controller: {
@@ -327,7 +439,16 @@ var player = {
 		{
 			player.locked = true;
 			Events.rocketevent = true;
-		}		
+		}
+		//gem collection
+		for (var i = 0; i < gems.length; i++)
+		{
+			if (player.collision(gems[i]))
+			{
+				Score+=10;
+				gems.splice(i, 1);
+			}
+		}			
 		//decrease force gradually if you are jumping or start falling
 		//if force increments below 0, correct it to 0 so you stop falling.
 		if (this.force > 0){
@@ -344,17 +465,28 @@ var player = {
 				this.y+=(gravity - this.force);
 			}
 			else{
-				if (this.jumpTrigger == false){
+				if (this.jumpTrigger == false && this.fall == false){
 					this.jump = false;
 					this.y = floor.y - this.height;
 				}
 				else{
-					this.y+=(gravity - this.force);
+					if (this.fall == false)
+					{
+						this.y+=(gravity - this.force);
+					}
 				}
+			}
+			//fall down hole
+			if (this.fall == true)
+			{
+				this.y+=(gravity - this.force);
+			}
+			if (this.y > canvas.height){
+				player.die();
 			}
 			
 			context.beginPath();
-			context.fillStyle = "red";
+			context.fillStyle = "lightgray";
 			context.rect(this.x, this.y, this.width, this.height);
 			context.stroke();
 			context.fill();
@@ -381,7 +513,7 @@ document.addEventListener("keydown", function(key){
 		player.controller.right = false;
 		player.controller.left = true;
 	}
-	else if (key.keyCode == 38){
+	else if (key.keyCode == 38 && player.fall == false){
 		if (player.jump == false){
 			player.jump = true;
 			player.force = gridWidth * 0.8;
@@ -402,7 +534,9 @@ document.addEventListener("keyup", function(key){
 var Update = function(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	pictures.drawBackgrounds(backgrounds);
+	pictures.drawGems(gems);
 	floor.update();
+	holeUpdates();
 	//other updates here
 	if (Events.win == true)
 	{
@@ -463,6 +597,7 @@ var restart = () => {
 	Events.win = false;
 	Events.die = false;
 	player.locked = false;
+	player.fall = false;
 	player.flag = false;
 	score = 0;
 	backgrounds = [];
