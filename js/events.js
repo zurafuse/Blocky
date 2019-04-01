@@ -4,6 +4,20 @@ var Events = {
 	boatevent: false,
 	planeevent: false,
 	rocketevent: false,
+	rotateScreen: () => {
+		canvas.width = window.innerWidth * 0.95;
+		canvas.height = window.innerHeight * 0.95;
+		context.fillStyle = "black";
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		context.fillStyle = "white";
+		context.font = canvas.width * 0.12  + "px Verdana";
+		context.fillText("PAUSED", canvas.width * .2, canvas.height * .1);
+		context.font = canvas.width * 0.08  + "px Verdana";
+		context.fillText("Please rotate Device", canvas.width * .05, canvas.height * .2);
+		context.fillText("to continue playing.", canvas.width * .05, canvas.height * .3);
+		context.drawImage(pictures.rotate, canvas.width * .1, canvas.height * .4, canvas.width * .85, canvas.height * .4);
+
+	},
 	gameover: () => {
 		//display Game Over text
 		context.font = "bold " + gridWidth + "pt sans-serif";

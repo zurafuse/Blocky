@@ -1,13 +1,22 @@
 var Animation = window.requestAnimationFrame;
 var canvas = document.getElementById("canvas");
-canvas.width = window.innerWidth *.9;
-canvas.height = canvas.width * .5;
-var context = canvas.getContext("2d");
+canvas.width = window.innerWidth * 0.9;
+canvas.height = canvas.width * 0.5;
+var originalWidth = window.innerWidth * 0.9;
+var originalHeight = canvas.width * 0.5;
+var screenTurned = false;
 var gridWidth = canvas.width / 30;
+var isMobile = true;
+if (window.innerWidth < window.innerHeight)
+{	
+	screenTurned = true;
+}
+var context = canvas.getContext("2d");
 var Level = 1;
 var Score = 0;
 
 var pictures = {
+	rotate: new Image(),
 	backgrounds: {
 		backgroundColor: "#acf",
 		cloud1: new Image(),
@@ -32,9 +41,11 @@ var pictures = {
 		rocket: new Image(),
 		flag: new Image(),
 		flagicon: new Image(),
-		gems: new Image()
+		gems: new Image(),
+		sign: new Image()
 	},
 	setPics: function(){
+		this.rotate.src = "images/rotate.png";
 		this.backgrounds.cloud1.src = "images/cloud1.png";
 		this.backgrounds.cloud2.src = "images/cloud2.png";
 		this.backgrounds.hill1.src = "images/hill1.png";
@@ -56,6 +67,7 @@ var pictures = {
 		this.objects.flag.src = "images/flag.png";
 		this.objects.flagicon.src = "images/flagicon.png";
 		this.objects.gems.src = "images/gems.png";
+		this.objects.sign.src = "images/sign.png";
 	},
 	drawBackgrounds: function(pics){
 		//draw sky
@@ -207,6 +219,19 @@ var Objects = {
 		y: gridWidth * 7,
 		width: gridWidth * 8,
 		height: gridWidth * 5
+	},
+	sign: {
+		img:pictures.objects.sign,
+		x: gridWidth * 1.67,
+		y: gridWidth * 2,
+		width: gridWidth * 7,
+		height: gridWidth * 5,
+		draw: () => {
+			context.drawImage(Objects.sign.img, Objects.sign.x, Objects.sign.y, Objects.sign.width, Objects.sign.height);			
+		},
+		update: () => {
+			Objects.sign.draw();
+		}
 	}
 };
 
@@ -221,7 +246,7 @@ var holeClass = function(x, width, color){
 		this.color = color;
 	}
 	this.x = x * gridWidth;
-	this.y = floor.y - (canvas.height * 0.003);
+	this.y = floor.y - (canvas.height * 0.004);
 	this.width = width * gridWidth;
 	this.height = floor.height + (canvas.height * 0.01);
 	this.draw = () => {
@@ -366,6 +391,7 @@ var player = {
 	fall: false,
 	flag: false,
 	locked: false,
+	dir: "right",
 	controller: {
 		right: false,
 		left: false
@@ -412,6 +438,51 @@ var player = {
 		Events.die = true;
 		player.flag = false;
 		setTimeout(() => {restart();}, 2000);		
+	},
+	draw: function() {
+			//draw player
+			context.beginPath();
+			context.fillStyle = "lightgray";
+			context.rect(this.x, this.y, this.width, this.height);
+			context.stroke();
+			context.fill();
+			context.closePath();
+			if (player.dir == "right")
+			{
+				//draw eye
+				context.beginPath();
+				context.arc(this.x + (this.width * 0.74), this.y + (this.height * 0.25), (this.width * 0.18), 0, 2 * Math.PI);
+				context.fillStyle = "white";
+				context.fill();
+				context.stroke();
+				//draw pupil
+				context.beginPath();
+				context.arc(this.x + (this.width * 0.81), this.y + (this.height * 0.25), (this.width * 0.1), 0, 2 * Math.PI);
+				context.fillStyle = "black";
+				context.fill();
+				//draw smile
+				context.beginPath();
+				context.arc(this.x + (this.width * 0.82), this.y + (this.height * 0.55), (this.width * 0.2), 0.5, Math.PI);
+				context.stroke();				
+			}
+			else
+			{
+				//draw eye
+				context.beginPath();
+				context.arc(this.x + (this.width * 0.27), this.y + (this.height * 0.25), (this.width * 0.18), 0, 2 * Math.PI);
+				context.fillStyle = "white";
+				context.fill();
+				context.stroke();
+				//draw pupil
+				context.beginPath();
+				context.arc(this.x + (this.width * 0.2), this.y + (this.height * 0.25), (this.width * 0.1), 0, 2 * Math.PI);
+				context.fillStyle = "black";
+				context.fill();
+				//draw smile
+				context.beginPath();
+				context.arc(this.x + (this.width * 0.18), this.y + (this.height * 0.55), (this.width * 0.2), 0, Math.PI * 0.8);
+				context.stroke();				
+			}
 	},
 	update: function(){
 		//win
@@ -484,15 +555,12 @@ var player = {
 			if (this.y > canvas.height){
 				player.die();
 			}
-			
-			context.beginPath();
-			context.fillStyle = "lightgray";
-			context.rect(this.x, this.y, this.width, this.height);
-			context.stroke();
-			context.fill();
-			context.closePath();
 		}
-		
+		//draw player
+		if (this.locked != true)
+		{
+			this.draw();
+		}		
 		//display Level text at top
 		context.font = "bold " + gridWidth + "pt sans-serif";
 		context.strokeStyle = "black";
@@ -504,94 +572,6 @@ var player = {
 	}
 };
 
-document.addEventListener("keydown", function(key){
-	if (key.keyCode == 39){
-		player.controller.right = true;
-		player.controller.left = false;
-	}
-	else if (key.keyCode == 37){
-		player.controller.right = false;
-		player.controller.left = true;
-	}
-	else if (key.keyCode == 38 && player.fall == false){
-		if (player.jump == false){
-			player.jump = true;
-			player.force = gridWidth * 0.8;
-			player.jumpTrigger = true;
-			setTimeout(function(){player.jumpTrigger = false;}, 200);
-		}
-	}
-});
-document.addEventListener("keyup", function(key){
-	if (key.keyCode == 39){
-		player.controller.right = false;		
-	}
-	else if (key.keyCode == 37){
-		player.controller.left = false;		
-	}	
-});
-
-var Update = function(){
-	context.clearRect(0, 0, canvas.width, canvas.height);
-	pictures.drawBackgrounds(backgrounds);
-	pictures.drawGems(gems);
-	floor.update();
-	holeUpdates();
-	//other updates here
-	if (Events.win == true)
-	{
-		Events.winner();		
-	}
-	if (Events.die == true)
-	{
-		Events.gameover();		
-	}
-	if (Events.boatevent == true)
-	{
-		Events.boat();
-	}
-	if (Events.planeevent == true)
-	{
-		Events.plane();
-	}
-	if (Events.rocketevent == true)
-	{
-		Events.rocket();
-	}
-	//Level updates here
-	if (Level == 20 || Level == 21)
-	{
-		Objects.plane.update();
-	}
-	if (Level == 10 || Level == 11)
-	{
-		Objects.boat.update();
-	}
-	if (Level == 5 || Level == 10)
-	{
-		Objects.cave.update();
-	}
-	if (Level == 15)
-	{
-		Objects.mountain.update();
-	}
-	if (Level == 25 || Level == 26)
-	{
-		Objects.rocket.update();
-	}
-	if (player.flag == false && Level == 30)
-	{
-		Objects.flag.update();
-	}
-	if (player.flag == true)
-	{
-		Objects.flagicon.update();
-	}
-	player.update();
-	Animation(Update);
-};
-
-Update();
 
 var restart = () => {
 	Events.win = false;
