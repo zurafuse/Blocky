@@ -28,7 +28,10 @@ var pictures = {
 		mushroom: new Image(),
 		palm: new Image(),
 		tree: new Image(),
-		house: new Image()
+		house: new Image(),
+		bush: new Image(),
+		mountain: new Image(),
+		snowmountain: new Image()
 	},
 	objects: {
 		plane: new Image(),
@@ -68,6 +71,9 @@ var pictures = {
 		this.objects.flagicon.src = "images/flagicon.png";
 		this.objects.gems.src = "images/gems.png";
 		this.objects.sign.src = "images/sign.png";
+		this.backgrounds.bush.src = "images/bush.png";
+		this.backgrounds.mountain.src = "images/mountain.png";
+		this.backgrounds.snowmountain.src = "images/snowmountain.png";
 	},
 	drawBackgrounds: function(pics){
 		//draw sky
@@ -194,7 +200,7 @@ var Objects = {
 		update: () => {
 			if (player.collision(Objects.flag))
 			{
-				score+=50;
+				Score+=50;
 				player.flag = true;
 			}
 			Objects.flag.draw();
@@ -416,7 +422,7 @@ var player = {
 					this.x+=this.speed;
 				}
 				else{
-					if (Level != 30){
+					if (Level != 28){
 						newLevel("right");
 					}
 				}

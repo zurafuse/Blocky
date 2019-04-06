@@ -1,16 +1,16 @@
 document.addEventListener("keydown", function(key){
 	isMobile = false;
-	if (key.keyCode == 39){
+	if (key.keyCode == 39 || key.keyCode == 68){
 		player.controller.right = true;
 		player.dir = "right";
 		player.controller.left = false;
 	}
-	else if (key.keyCode == 37){
+	else if (key.keyCode == 37 || key.keyCode == 65){
 		player.controller.right = false;
 		player.dir = "left";
 		player.controller.left = true;
 	}
-	else if (key.keyCode == 38 && player.fall == false){
+	else if ((key.keyCode == 38 || key.keyCode == 87 || key.keyCode == 32) && player.fall == false){
 		if (player.jump == false){
 			player.jump = true;
 			player.force = gridWidth * 0.8;
@@ -20,11 +20,11 @@ document.addEventListener("keydown", function(key){
 	}
 });
 document.addEventListener("keyup", function(key){
-	if (key.keyCode == 39){
-		player.controller.right = false;		
+	if (key.keyCode == 39 || key.keyCode == 68){
+		player.controller.right = false;	
 	}
-	else if (key.keyCode == 37){
-		player.controller.left = false;		
+	else if (key.keyCode == 37 || key.keyCode == 65){
+		player.controller.left = false;
 	}	
 });
 
@@ -70,18 +70,18 @@ var BlockUI = {
 };
 BlockUI.joyStick.left.x = gridWidth * 2;
 BlockUI.joyStick.left.y = gridWidth * 13;
-BlockUI.joyStick.left.width = gridWidth * 2;
-BlockUI.joyStick.left.height = gridWidth * 2;
+BlockUI.joyStick.left.width = gridWidth * 2.5;
+BlockUI.joyStick.left.height = gridWidth * 2.5;
 
 BlockUI.joyStick.right.x = gridWidth * 7;
 BlockUI.joyStick.right.y = gridWidth * 13;
-BlockUI.joyStick.right.width = gridWidth * 2;
-BlockUI.joyStick.right.height = gridWidth * 2;
+BlockUI.joyStick.right.width = gridWidth * 2.5;
+BlockUI.joyStick.right.height = gridWidth * 2.5;
 
 BlockUI.joyStick.up.x = gridWidth * 26;
 BlockUI.joyStick.up.y = gridWidth * 12;
-BlockUI.joyStick.up.width = gridWidth * 2;
-BlockUI.joyStick.up.height = gridWidth * 2;
+BlockUI.joyStick.up.width = gridWidth * 2.5;
+BlockUI.joyStick.up.height = gridWidth * 2.5;
 
 // touch event handlers
 // Set up touch events for mobile, etc

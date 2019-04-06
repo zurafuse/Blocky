@@ -66,7 +66,7 @@ var Update = function(){
 		{
 			Objects.rocket.update();
 		}
-		if (player.flag == false && Level == 30)
+		if (player.flag == false && Level == 28)
 		{
 			Objects.flag.update();
 		}
