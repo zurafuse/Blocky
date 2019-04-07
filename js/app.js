@@ -31,7 +31,8 @@ var pictures = {
 		house: new Image(),
 		bush: new Image(),
 		mountain: new Image(),
-		snowmountain: new Image()
+		snowmountain: new Image(),
+		earth: new Image()
 	},
 	objects: {
 		plane: new Image(),
@@ -74,6 +75,7 @@ var pictures = {
 		this.backgrounds.bush.src = "images/bush.png";
 		this.backgrounds.mountain.src = "images/mountain.png";
 		this.backgrounds.snowmountain.src = "images/snowmountain.png";
+		this.backgrounds.earth.src = "images/earth.png";
 	},
 	drawBackgrounds: function(pics){
 		//draw sky
@@ -102,17 +104,54 @@ var pictures = {
 		pics.forEach(function(pic){
 			pic.draw();
 		});
+		//star backgrounds on moon
+		if (Level == 26 || Level == 27 || Level == 28)
+		{
+			this.drawStars();
+		}
 	}, 
 	drawGems: function(pics){
 		//draw gems
 		pics.forEach(function(pic){
 			pic.draw();
 		});
-	}	
+	},
+	drawStars: function(){
+		var starSet = [
+			{x: 4, y: 3, size: 5, color: "white"},
+			{x: 5, y: 4, size: 4, color: "white"},	
+			{x: 15, y: 4, size: 4, color: "red"},	
+			{x: 25, y: 2, size: 4, color: "white"},	
+			{x: 6, y: 5, size: 4, color: "blue"},	
+			{x: 18, y: 8, size: 5, color: "white"},
+			{x: 1, y: 3, size: 3, color: "white"},
+			{x: 1.2, y: 3.5, size: 3, color: "white"},
+			{x: 1, y: 4, size: 3, color: "white"},
+			{x: 1.5, y: 5, size: 3, color: "white"},
+			{x: 1.8, y: 8, size: 3, color: "white"},
+			{x: 2, y: 2, size: 3, color: "white"},
+			{x: 2, y: 3, size: 3, color: "white"},
+			{x: 2.2, y: 3.5, size: 3, color: "white"},
+			{x: 2.1, y: 5, size: 3, color: "white"},
+			{x: 2.5, y: 6, size: 3, color: "white"},
+			{x: 2.25, y: 7, size: 3, color: "white"},
+			{x: 2, y: 4, size: 3, color: "white"},
+			{x: 2.1, y: 8, size: 3, color: "white"}			
+		];
+		for (var i = 0; i < starSet.length; i++)
+		{
+			context.beginPath();
+			context.fillStyle = starSet[i].color;
+			context.arc(gridWidth * starSet[i].x, gridWidth * starSet[i].y, gridWidth * (starSet[i].size * 0.01), 0, 2 * Math.PI);
+			context.fill();
+			context.closePath();
+		}
+			
+	}
 };
 pictures.setPics();
 
-const gravity = gridWidth * 0.3;
+var gravity = gridWidth * 0.3;
 
 
 var Objects = {
@@ -432,7 +471,7 @@ var player = {
 					this.x-=this.speed; 
 				}
 				else{
-					if (Level != 1){
+					if (Level != 1 && Level !=26){
 						newLevel("left");
 					}
 				}

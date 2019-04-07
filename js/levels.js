@@ -541,7 +541,11 @@ else if (Level == 16){
 		new background(pictures.backgrounds.cloud2, 17, 7, 2, 1), 
 		new background(pictures.backgrounds.cloud2, 26, 5, 2, 1));
 		
-	backgrounds.push(new background(pictures.backgrounds.snowmountain, 24, 3, 3, 6));	
+	backgrounds.push(new background(pictures.backgrounds.snowmountain, 24, 3, 3, 6));
+
+	gems.push(new gemClass("purple", 7, 8, 0.5, 0.5), new gemClass("rainbow", 9, 8, 0.5, 0.5), new gemClass("green", 11, 8, 0.5, 0.5));
+	gems.push(new gemClass("yellow", 15, 6, 0.5, 0.5), new gemClass("blue", 16, 6, 0.5, 0.5), new gemClass("pink", 17, 6, 0.5, 0.5));
+	
 
 	floor = {
 		x: 0,
@@ -572,6 +576,10 @@ else if (Level == 17){
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 10, 6, 2, 1));
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 15, 4, 2, 1));
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 25, 3, 2, 1));
+	
+	gems.push(new gemClass("yellow", 5, 8, 0.5, 0.5), new gemClass("orange", 7, 8, 0.5, 0.5), new gemClass("red", 9, 8, 0.5, 0.5));
+	gems.push(new gemClass("pink", 12, 5, 0.5, 0.5), new gemClass("purple", 13, 5, 0.5, 0.5), new gemClass("blue", 14, 5, 0.5, 0.5));
+	gems.push(new gemClass("hazel", 22, 8, 0.5, 0.5), new gemClass("green", 24, 8, 0.5, 0.5), new gemClass("white", 26, 8, 0.5, 0.5));	
 	
 	holes.push(new holeClass(11, 5));
 
@@ -634,6 +642,17 @@ else if (Level == 19){
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 15, 4, 2, 1));
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 25, 3, 2, 1));
 	backgrounds.push(new background(pictures.backgrounds.snowmountain, 26, 5, 2, 6));
+	
+	gems.push(new gemClass("white", 6, 8, 0.5, 0.5), 
+		new gemClass("yellow", 8, 8, 0.5, 0.5), 
+		new gemClass("orange", 10, 8, 0.5, 0.5), 
+		new gemClass("red", 12, 8, 0.5, 0.5));
+	gems.push(new gemClass("pink", 14, 8, 0.5, 0.5), 
+		new gemClass("purple", 16, 8, 0.5, 0.5), 
+		new gemClass("blue", 18, 8, 0.5, 0.5));
+	gems.push(new gemClass("hazel", 20, 8, 0.5, 0.5), 
+		new gemClass("green", 22, 8, 0.5, 0.5));	
+	
 	
 	floor = {
 		x: 0,
@@ -764,13 +783,16 @@ else if (Level == 21){
 }
 //LEVEL 22
 else if (Level == 22){
-	
+	gravity = gridWidth * 0.3;	
 	pictures.backgrounds.backgroundColor = "#acf";
 	
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 2, 3, 2, 1));
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 10, 6, 2, 1));
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 15, 4, 2, 1));
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 25, 3, 2, 1));
+	
+	gems.push(new gemClass("yellow", 11, 5, 0.5, 0.5), new gemClass("blue", 12, 5, 0.5, 0.5), new gemClass("pink", 13, 5, 0.5, 0.5));
+	
 
 	floor = {
 		x: 0,
@@ -793,7 +815,7 @@ else if (Level == 22){
 }
 //LEVEL 23
 else if (Level == 23){
-	
+	gravity = gridWidth * 0.3;	
 	pictures.backgrounds.backgroundColor = "#acf";
 
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 5, 4, 2, 1), new background(pictures.backgrounds.cloud2, 10, 5, 3, 2), 
@@ -821,7 +843,7 @@ else if (Level == 23){
 }
 //LEVEL 24
 else if (Level == 24){
-
+	gravity = gridWidth * 0.3;
 	pictures.backgrounds.backgroundColor = "#acf";
 	
 	backgrounds.push(new background(pictures.backgrounds.cloud1, 4, 3, 2, 1), 
@@ -857,6 +879,7 @@ else if (Level == 24){
 }
 //LEVEL 25
 else if (Level == 25){
+	gravity = gridWidth * 0.3;
 	if (dir == "left"){
 		player.y = gridWidth;
 		player.x = canvas.width * 0.5;
@@ -892,11 +915,14 @@ else if (Level == 25){
 }
 //LEVEL 26
 else if (Level == 26){
+gravity = gridWidth * 0.2;
 	if (dir == "right"){
 		player.y = gridWidth;
 		player.x = canvas.width * 0.5;
 	}
 	pictures.backgrounds.backgroundColor = "black";
+	
+	backgrounds.push(new background(pictures.backgrounds.earth, 13, 5, 4, 4));
 	
 	Objects.rocket.x = canvas.width * 0.08;
 	Objects.rocket.y = canvas.height * 0.51;	
@@ -921,8 +947,22 @@ else if (Level == 26){
 }
 //LEVEL 27
 else if (Level == 27){
-
+	gravity = gridWidth * 0.2;
 	pictures.backgrounds.backgroundColor = "black";
+	//stars
+	
+	backgrounds.push(new background(pictures.backgrounds.earth, 13, 5, 4, 4));
+	
+	gems.push(new gemClass("white", 6, 8, 0.5, 0.5), 
+		new gemClass("yellow", 8, 8, 0.5, 0.5), 
+		new gemClass("orange", 10, 8, 0.5, 0.5), 
+		new gemClass("red", 12, 8, 0.5, 0.5));
+	gems.push(new gemClass("pink", 14, 8, 0.5, 0.5), 
+		new gemClass("purple", 16, 8, 0.5, 0.5), 
+		new gemClass("blue", 18, 8, 0.5, 0.5));
+	gems.push(new gemClass("hazel", 20, 8, 0.5, 0.5), 
+		new gemClass("green", 22, 8, 0.5, 0.5));
+		
 	floor = {
 		x: 0,
 		y: canvas.height * .8,
@@ -943,8 +983,13 @@ else if (Level == 27){
 }
 //LEVEL 28
 else if (Level == 28){
-
+	gravity = gridWidth * 0.2;
 	pictures.backgrounds.backgroundColor = "black";
+	
+	pictures.backgrounds.backgroundColor = "black";
+	//stars
+	
+	backgrounds.push(new background(pictures.backgrounds.earth, 13, 5, 4, 4));	
 	floor = {
 		x: 0,
 		y: canvas.height * .8,

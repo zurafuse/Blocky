@@ -16,6 +16,7 @@ var Update = function(){
 		pictures.drawGems(gems);
 		floor.update();
 		holeUpdates();
+		
 		//other updates here
 		if (Events.win == true)
 		{
